@@ -1,53 +1,45 @@
-# FleshAndStoneCpp
+# Isaac Engine Base — Milestone 0/1
 
-Dependency-free C++20 Win32 game starter.
+Small C++20 + CMake + SDL2 foundation for a 2D top-down Isaac-like engine.
 
-This project uses raw Win32 plus a software backbuffer. It is intentionally boring and portable across normal Windows C++ toolchains.
+## What this milestone includes
 
-## Build with MSVC
+- CMake project.
+- SDL2 window lifecycle.
+- Fixed timestep game loop.
+- Input snapshot.
+- Renderer clear/present.
+- Placeholder room/player rectangle rendering.
+- Debug FPS/fixed update count in the window title and console.
+- Clean `src/engine` and `src/game` split.
 
-Open **x64 Native Tools Command Prompt for VS**, then run:
+## Install SDL2 with vcpkg
 
-```bat
-build_msvc.bat
-build\game.exe
+```powershell
+git clone https://github.com/microsoft/vcpkg.git C:\dev\vcpkg
+C:\dev\vcpkg\bootstrap-vcpkg.bat
+C:\dev\vcpkg\vcpkg.exe install sdl2:x64-windows
 ```
 
-## Build with MinGW
+## Build
 
-```bat
-build_mingw.bat
-build\game.exe
+```powershell
+cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=C:\dev\vcpkg\scripts\buildsystems\vcpkg.cmake
+cmake --build build --config Debug
+```
+
+## Run
+
+```powershell
+.\build\Debug\isaac_engine_base.exe
 ```
 
 ## Controls
 
-- WASD / Arrow keys: move
-- Mouse: aim
-- Left click / Space: shoot
-- R: restart room
-- Touch teal portal after clearing enemies: next room
+- `WASD` / arrow keys: move player block.
+- `F1`: toggle debug outline.
+- `Escape`: quit.
 
-## Structure
+## Expected result
 
-```text
-src/main.cpp          Native Win32 platform + game loop + software renderer
-build_msvc.bat        MSVC build
-build_mingw.bat       MinGW build
-tests/smoke_test.py   Checks required project files/content
-```
-
-## Why one C++ file?
-
-Because first we prove the native window, loop, input, rendering, and gameplay work. Then split it.
-
-Recommended next split:
-
-```text
-src/platform_win32.cpp
-src/game.cpp
-src/game.hpp
-src/renderer_software.cpp
-src/renderer_software.hpp
-src/math.hpp
-```
+A 1280x720 window opens. A room rectangle and player square render. The player square moves inside the room bounds. The title updates once per second with FPS and fixed update count.
