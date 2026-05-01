@@ -1,21 +1,41 @@
-# FleshAndStoneCpp
+# FleshandStone2
 
-Dependency-free C++20 Win32 game starter.
+Native C++ raylib prototype for Flesh and Stone 2.
 
-This project uses raw Win32 plus a software backbuffer. It is intentionally boring and portable across normal Windows C++ toolchains.
+## Requirements
+
+- C++20 compiler
+- raylib installed locally
+- Windows build scripts are included
 
 ## Build with MSVC
 
-Open **x64 Native Tools Command Prompt for VS**, then run:
+Open **x64 Native Tools Command Prompt for VS**, then:
 
 ```bat
 build_msvc.bat
 build\game.exe
 ```
 
+If raylib is not in a compiler-default include/lib path, set `RAYLIB_PATH` first:
+
+```bat
+set RAYLIB_PATH=C:\raylib\raylib
+build_msvc.bat
+```
+
+The script checks:
+
+```text
+%RAYLIB_PATH%\src
+%RAYLIB_PATH%\include
+%RAYLIB_PATH%\lib
+```
+
 ## Build with MinGW
 
 ```bat
+set RAYLIB_PATH=C:\raylib\raylib
 build_mingw.bat
 build\game.exe
 ```
@@ -25,29 +45,30 @@ build\game.exe
 - WASD / Arrow keys: move
 - Mouse: aim
 - Left click / Space: shoot
-- R: restart room
-- Touch teal portal after clearing enemies: next room
+- R: restart
+- Clear all enemies, then enter the teal portal to advance rooms
 
-## Structure
-
-```text
-src/main.cpp          Native Win32 platform + game loop + software renderer
-build_msvc.bat        MSVC build
-build_mingw.bat       MinGW build
-tests/smoke_test.py   Checks required project files/content
-```
-
-## Why one C++ file?
-
-Because first we prove the native window, loop, input, rendering, and gameplay work. Then split it.
-
-Recommended next split:
+## Current structure
 
 ```text
-src/platform_win32.cpp
-src/game.cpp
-src/game.hpp
-src/renderer_software.cpp
-src/renderer_software.hpp
-src/math.hpp
+src/main.cpp       raylib prototype
+build_msvc.bat    MSVC build script
+build_mingw.bat   MinGW build script
+tests/            repository smoke checks
 ```
+
+## Next engineering step
+
+Once the raylib build is confirmed on-machine, split `src/main.cpp` into:
+
+```text
+src/main.cpp
+src/game/game.hpp
+src/game/game.cpp
+src/game/combat.cpp
+src/game/level.cpp
+src/render/render_raylib.cpp
+src/core/math.hpp
+```
+
+No more raw Win32 boilerplate. We are using raylib for the platform/rendering layer.
