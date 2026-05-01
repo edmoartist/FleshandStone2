@@ -15,7 +15,6 @@ REQUIRED = [
 
 def main() -> None:
     missing = [path for path in REQUIRED if not (ROOT / path).exists()]
-
     if missing:
         print("Missing required files:")
         for path in missing:
@@ -25,16 +24,15 @@ def main() -> None:
     main_cpp = (ROOT / "src/main.cpp").read_text(encoding="utf-8")
 
     checks = {
-        "WinMain exists": "WinMain" in main_cpp,
-        "window proc exists": "WindowProc" in main_cpp,
-        "software backbuffer exists": "Backbuffer" in main_cpp,
-        "game update exists": "update_game" in main_cpp,
-        "game render exists": "render_game" in main_cpp,
-        "portal exists": "enter_next_room" in main_cpp,
+        "raylib include": '#include "raylib.h"' in main_cpp,
+        "InitWindow": "InitWindow" in main_cpp,
+        "BeginDrawing": "BeginDrawing" in main_cpp,
+        "game update": "void update(" in main_cpp,
+        "game draw": "void draw(" in main_cpp,
+        "portal progression": "nextRoom" in main_cpp,
     }
 
     failed = [name for name, passed in checks.items() if not passed]
-
     if failed:
         print("Failed checks:")
         for name in failed:
